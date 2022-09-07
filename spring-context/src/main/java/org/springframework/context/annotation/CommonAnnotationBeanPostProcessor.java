@@ -173,6 +173,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 	private final Set<String> ignoredResourceTypes = new HashSet<>(1);
 
+	// 如果根据名字找不到，是否在通过类型匹配
 	private boolean fallbackToDefaultTypeMatch = true;
 
 	private boolean alwaysUseJndiLookup = false;
@@ -434,6 +435,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 	 * @see #getResource
 	 * @see Lazy
 	 */
+	// TODO: ？ 如何选择代理类新的
 	protected Object buildLazyResourceProxy(final LookupElement element, final @Nullable String requestingBeanName) {
 		TargetSource ts = new TargetSource() {
 			@Override
@@ -515,6 +517,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 			autowiredBeanNames = Collections.singleton(name);
 		}
 
+		// 注入resource之后，记录依赖关系，避免循环以来
 		if (factory instanceof ConfigurableBeanFactory) {
 			ConfigurableBeanFactory beanFactory = (ConfigurableBeanFactory) factory;
 			for (String autowiredBeanName : autowiredBeanNames) {
@@ -615,6 +618,7 @@ public class CommonAnnotationBeanPostProcessor extends InitDestroyAnnotationBean
 
 		@Override
 		protected Object getResourceToInject(Object target, @Nullable String requestingBeanName) {
+			// 是否有@Lazy注解，如果有返回的是一个Proxy
 			return (this.lazyLookup ? buildLazyResourceProxy(this, requestingBeanName) :
 					getResource(this, requestingBeanName));
 		}

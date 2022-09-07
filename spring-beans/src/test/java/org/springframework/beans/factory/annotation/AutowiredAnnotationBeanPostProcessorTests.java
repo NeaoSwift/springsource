@@ -105,6 +105,7 @@ public class AutowiredAnnotationBeanPostProcessorTests {
 	}
 
 
+	// 沒有
 	@Test
 	public void testIncompleteBeanDefinition() {
 		bf.registerBeanDefinition("testBean", new GenericBeanDefinition());

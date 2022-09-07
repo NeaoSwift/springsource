@@ -77,6 +77,8 @@ public class CommonAnnotationBeanPostProcessorTests {
 		assertTrue(bean.destroyCalled);
 	}
 
+	//这就是为什么直接自己写的BeanPostProcessor直接加@Configuration就可以
+	//不需要手动添加到DefaultListableBeanFactory的后置处理器列表中
 	@Test
 	public void testPostConstructAndPreDestroyWithApplicationContextAndPostProcessor() {
 		GenericApplicationContext ctx = new GenericApplicationContext();
@@ -224,6 +226,7 @@ public class CommonAnnotationBeanPostProcessorTests {
 			}
 		});
 
+		// placeHolder处理器，处理之后容器才能正常
 		PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
 		Properties props = new Properties();
 		props.setProperty("tb", "testBean4");
@@ -415,6 +418,11 @@ public class CommonAnnotationBeanPostProcessorTests {
 			assertEquals("testBean9", innerEx.getBeanName());
 		}
 
+		// 必须
+//		NestedTestBean tb9 = new NestedTestBean();
+//		bf.registerSingleton("testBean9", tb9);
+//		bf.getBean("annotatedBean2");
+
 		bf.destroySingletons();
 		assertTrue(bean.destroyCalled);
 		assertTrue(bean.destroy2Called);
@@ -469,6 +477,7 @@ public class CommonAnnotationBeanPostProcessorTests {
 
 		LazyResourceFieldInjectionBean bean = (LazyResourceFieldInjectionBean) bf.getBean("annotatedBean");
 		assertFalse(bf.containsSingleton("testBean"));
+		// @Lazy注释的field其被调用前，只是一个proxy。bean.testBean当前就是一个代理类
 		bean.testBean.setName("notLazyAnymore");
 		assertTrue(bf.containsSingleton("testBean"));
 		TestBean tb = (TestBean) bf.getBean("testBean");

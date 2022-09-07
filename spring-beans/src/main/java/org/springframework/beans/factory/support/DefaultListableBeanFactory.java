@@ -151,7 +151,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	/** Resolver to use for checking if a bean definition is an autowire candidate */
 	private AutowireCandidateResolver autowireCandidateResolver = new SimpleAutowireCandidateResolver();
 
-	/** Map from dependency type to corresponding autowired value */
+	/**
+	 * Map from dependency type to corresponding autowired value
+	 * 查找目标类型的容器
+	 * CommonAnnotationBeanPostProcessorTests#testResourceInjectionWithResolvableDependencyType方法
+	 **/
 	private final Map<Class<?>, Object> resolvableDependencies = new ConcurrentHashMap<>(16);
 
 	/** Map of bean definition objects, keyed by bean name */
@@ -595,8 +599,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 	//---------------------------------------------------------------------
 	// Implementation of ConfigurableListableBeanFactory interface
 	//---------------------------------------------------------------------
-
 	@Override
+
 	public void registerResolvableDependency(Class<?> dependencyType, @Nullable Object autowiredValue) {
 		Assert.notNull(dependencyType, "Dependency type must not be null");
 		if (autowiredValue != null) {
@@ -1147,6 +1151,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			return result;
 		}
 		finally {
+			// TODO: ?
 			ConstructorResolver.setCurrentInjectionPoint(previousInjectionPoint);
 		}
 	}
