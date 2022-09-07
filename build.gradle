@@ -1,5 +1,10 @@
 buildscript {
 	repositories {
+		maven { url 'https://maven.aliyun.com/repository/public'}
+		maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+		maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter'}
+		maven { url "https://repo.spring.io/libs-spring-framework-build" }
+		maven { url "https://repo.spring.io/plugins-release" }
 		maven { url "https://repo.spring.io/plugins-release" }
 	}
 	dependencies {
@@ -151,6 +156,8 @@ configure(allprojects) { project ->
 	}
 
 	repositories {
+		maven { url 'https://maven.aliyun.com/repository/public'}
+		maven { url "https://maven.aliyun.com/nexus/content/groups/public/" }
 		maven { url "https://repo.spring.io/libs-release" }
 	}
 
@@ -293,7 +300,7 @@ configure(rootProject) {
 		gradleVersion = '4.4.1'
 
 		doLast() {
-			def gradleOpts = "-XX:MaxMetaspaceSize=1024m -Xmx1024m"
+			def gradleOpts = "org.gradle.parallel=true -XX:MaxMetaspaceSize=1024m -Xmx1024m"
 			def gradleBatOpts = "$gradleOpts -XX:MaxHeapSize=256m"
 			File wrapperFile = file("gradlew")
 			wrapperFile.text = wrapperFile.text.replace("DEFAULT_JVM_OPTS=",
