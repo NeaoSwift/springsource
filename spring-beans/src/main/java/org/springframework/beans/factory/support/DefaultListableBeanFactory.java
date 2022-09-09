@@ -387,6 +387,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		return getBeanNamesForType(type, true, true);
 	}
 
+	// allowEagerInit=true factorybean 和 lazy init 实例
 	@Override
 	public String[] getBeanNamesForType(@Nullable Class<?> type, boolean includeNonSingletons, boolean allowEagerInit) {
 		if (!isConfigurationFrozen() || type == null || !allowEagerInit) {
@@ -1151,7 +1152,6 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			return result;
 		}
 		finally {
-			// TODO: ?
 			ConstructorResolver.setCurrentInjectionPoint(previousInjectionPoint);
 		}
 	}

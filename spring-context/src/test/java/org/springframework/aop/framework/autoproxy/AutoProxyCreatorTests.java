@@ -65,6 +65,7 @@ public class AutoProxyCreatorTests {
 		sac.registerSingleton("testInterceptor", TestInterceptor.class);
 
 		RootBeanDefinition proxyCreator = new RootBeanDefinition(BeanNameAutoProxyCreator.class);
+		// 设置拦截器的名称
 		proxyCreator.getPropertyValues().add("interceptorNames", "testInterceptor");
 		proxyCreator.getPropertyValues().add("beanNames", "singletonToBeProxied,innerBean,singletonFactoryToBeProxied");
 		sac.getDefaultListableBeanFactory().registerBeanDefinition("beanNameAutoProxyCreator", proxyCreator);
