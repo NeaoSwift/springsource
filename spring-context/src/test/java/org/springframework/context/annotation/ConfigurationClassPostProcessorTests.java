@@ -810,6 +810,7 @@ public class ConfigurationClassPostProcessorTests {
 		assertSame(ctx.getBean(TestBean.class), bean.testBeans.get(0));
 	}
 
+	// Map自动装配，
 	@Test
 	public void testMapInjectionFromSameConfigurationClass() {
 		ApplicationContext ctx = new AnnotationConfigApplicationContext(MapInjectionConfiguration.class);

@@ -387,7 +387,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		return getBeanNamesForType(type, true, true);
 	}
 
-	// allowEagerInit=true factorybean 和 lazy init 实例
+	// 1.allowEagerInit=true factorybean 和 lazy init 实例
+	// 2.优点：不需要创建实例就可以获取其类型
 	@Override
 	public String[] getBeanNamesForType(@Nullable Class<?> type, boolean includeNonSingletons, boolean allowEagerInit) {
 		if (!isConfigurationFrozen() || type == null || !allowEagerInit) {
