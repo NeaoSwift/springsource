@@ -16,12 +16,15 @@
 
 package org.springframework.beans.factory.config;
 
+import org.springframework.beans.TypeConverter;
 import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringValueResolver;
+
+import java.util.Set;
 
 /**
  * Abstract base class for property resource configurers that resolve placeholders
@@ -222,6 +225,7 @@ public abstract class PlaceholderConfigurerSupport extends PropertyResourceConfi
 			if (!(curName.equals(this.beanName) && beanFactoryToProcess.equals(this.beanFactory))) {
 				BeanDefinition bd = beanFactoryToProcess.getBeanDefinition(curName);
 				try {
+					// 解析beanDefinition里面的placeholder
 					visitor.visitBeanDefinition(bd);
 				}
 				catch (Exception ex) {
@@ -233,6 +237,10 @@ public abstract class PlaceholderConfigurerSupport extends PropertyResourceConfi
 		// New in Spring 2.5: resolve placeholders in alias target names and aliases as well.
 		beanFactoryToProcess.resolveAliases(valueResolver);
 
+		/**
+		 * 将valueResolver设置到容器中，在{@link org.springframework.beans.factory.support.DefaultListableBeanFactory#doResolveDependency}
+		 * 中解析字段
+		 */
 		// New in Spring 3.0: resolve placeholders in embedded values such as annotation attributes.
 		beanFactoryToProcess.addEmbeddedValueResolver(valueResolver);
 	}

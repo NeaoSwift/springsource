@@ -78,6 +78,8 @@ class ConfigurationClassEnhancer {
 			//通过增强以后，配置类中使用@Bean注解的bean定义方法就不再是普通的方法了，它们具有了如下跟bean作用域有关的能力，以单例bean为例 ：
 			//1. 它们首次被调用时，相应方法逻辑会被执行用于创建bean实例；
 			//2. 再次被调用时，不会再执行创建bean实例，而是根据bean名称返回首次该方法被执行时创建的bean实例。
+			// 这个是@configration注解特有的功能， 具体看下以下帖子 @configration和@component的不同
+			// https://blog.csdn.net/isea533/article/details/78072133
 			new BeanMethodInterceptor(),
 			// 拦截BeanFactoryAware 定义的方法 setBeanFactory
 			new BeanFactoryAwareMethodInterceptor(),

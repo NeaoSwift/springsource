@@ -2652,7 +2652,7 @@ public class DefaultListableBeanFactoryTests {
 		doTestFieldSettingWithInstantiationAwarePostProcessor(true);
 	}
 
-	// 可以控制properties的注入
+	// 可以控制properties的注入 skipPropertyPopulation控制是否跳过依赖注入
 	private void doTestFieldSettingWithInstantiationAwarePostProcessor(final boolean skipPropertyPopulation) {
 		DefaultListableBeanFactory lbf = new DefaultListableBeanFactory();
 		RootBeanDefinition bd = new RootBeanDefinition(TestBean.class);

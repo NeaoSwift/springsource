@@ -107,8 +107,10 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 
 	private final Set<String> defaultProfiles = new LinkedHashSet<>(getReservedDefaultProfiles());
 
+	// 核心存储类
 	private final MutablePropertySources propertySources = new MutablePropertySources(this.logger);
 
+	// 占位符核心处理类，私有且不可设置。后面的很多方法都是被委托的。意味着子类都是默认使用这个解析器的
 	private final ConfigurablePropertyResolver propertyResolver =
 			new PropertySourcesPropertyResolver(this.propertySources);
 

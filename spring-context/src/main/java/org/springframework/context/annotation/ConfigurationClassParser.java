@@ -135,6 +135,7 @@ class ConfigurationClassParser {
 
 	private final List<String> propertySourceNames = new ArrayList<>();
 
+	// import栈，已经import的类入栈。重复就报错
 	private final ImportStack importStack = new ImportStack();
 
 	@Nullable
@@ -609,12 +610,15 @@ class ConfigurationClassParser {
 						ParserStrategyUtils.invokeAwareMethods(
 								selector, this.environment, this.resourceLoader, this.registry);
 						if (this.deferredImportSelectors != null && selector instanceof DeferredImportSelector) {
+							// 如果是DeferredImportSelector，放到deferredImportSelectors里面，最后再处理
 							this.deferredImportSelectors.add(
 									new DeferredImportSelectorHolder(configClass, (DeferredImportSelector) selector));
 						}
 						else {
 							String[] importClassNames = selector.selectImports(currentSourceClass.getMetadata());
 							Collection<SourceClass> importSourceClasses = asSourceClasses(importClassNames);
+							// 直接扫描并注册，也就是说@Import注册的类里面的bean注册到beanFactory时间上要优于被@Import注释的类里面的Bean
+							// https://cloud.tencent.com/developer/article/1811700
 							processImports(configClass, currentSourceClass, importSourceClasses, false);
 						}
 					}
@@ -624,8 +628,13 @@ class ConfigurationClassParser {
 						Class<?> candidateClass = candidate.loadClass();
 						ImportBeanDefinitionRegistrar registrar =
 								BeanUtils.instantiateClass(candidateClass, ImportBeanDefinitionRegistrar.class);
+						// 如果ImportBeanDefinitionRegistrar实现了Aware接口，在这里设置
 						ParserStrategyUtils.invokeAwareMethods(
 								registrar, this.environment, this.resourceLoader, this.registry);
+						/**
+						 * 放到configClass里面，处理过程在
+						 * {@link ConfigurationClassBeanDefinitionReader#loadBeanDefinitionsFromRegistrars}
+						 */
 						configClass.addImportBeanDefinitionRegistrar(registrar, currentSourceClass.getMetadata());
 					}
 					else {
